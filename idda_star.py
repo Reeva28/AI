@@ -1,74 +1,64 @@
-class Node:
-    def __init__(self, name, cost=0, heuristic=0):
-        self.name = name
-        self.cost = cost
-        self.heuristic = heuristic
-        self.f = cost + heuristic  # Total cost
-
-def ida_star(start, goal, graph, heuristic):
-    threshold = heuristic[start]
-    path = [start]
+def input_tree_with_heuristics():
+    tree = {}
+    heuristics = {}
     
+    n = int(input("Enter number of nodes: "))
+    
+    for _ in range(n):
+        node = input("Node: ")
+        children_input = input(f"Children of {node} (format: child:cost, comma-separated): ")
+        tree[node] = []
+        if children_input:
+            for pair in children_input.split(','):
+                child, cost = pair.strip().split(':')
+                tree[node].append((child.strip(), int(cost)))
+        heuristics[node] = int(input(f"Heuristic for node {node}: "))
+    
+    return tree, heuristics
+
+def ida_star(start, goal, tree, heuristics):
+    threshold = heuristics[start]
+    path = [start]
+
     while True:
-        print(f"\nCurrent threshold: {threshold}")
-        temp = search(path, 0, threshold, goal, graph, heuristic)
-        print(f"Path traversed in this iteration: {' -> '.join(path)}")
-        
+        print(f"\nCurrent Threshold: {threshold}")
+        temp = search(path, 0, threshold, goal, tree, heuristics)
+        print("Path in this iteration:", " -> ".join(path))
         if temp == "FOUND":
             return path
         if temp == float('inf'):
-            return None  # No path found
-        threshold = temp  # Update threshold for next iteration
+            return None
+        threshold = temp
 
-def search(path, g, threshold, goal, graph, heuristic):
+def search(path, g, threshold, goal, tree, heuristics):
     current = path[-1]
-    f = g + heuristic[current]
-    
+    f = g + heuristics[current]
+
     if f > threshold:
-        return f  # Return the f value if it's greater than the threshold
-    
+        return f
     if current == goal:
-        return "FOUND"  # Goal found
-    
+        return "FOUND"
+
     min_threshold = float('inf')
-    
-    for neighbor, cost in graph[current].items():
-        if neighbor not in path:  # Avoid cycles
+    for neighbor, cost in tree.get(current, []):
+        if neighbor not in path:
             path.append(neighbor)
-            temp = search(path, g + cost, threshold, goal, graph, heuristic)
+            temp = search(path, g + cost, threshold, goal, tree, heuristics)
             if temp == "FOUND":
                 return "FOUND"
             if temp < min_threshold:
                 min_threshold = temp
-            path.pop()  # Backtrack
-    
-    return min_threshold  # Return the minimum threshold found
+            path.pop()
+    return min_threshold
 
-# Input graph
-graph = {}
-heuristic = {}
+if __name__ == "__main__":
+    tree, heuristics = input_tree_with_heuristics()
+    start = input("\nEnter start node: ")
+    goal = input("Enter goal node: ")
 
-n = int(input("Enter the number of nodes: "))
+    result_path = ida_star(start, goal, tree, heuristics)
 
-for _ in range(n):
-    node = input("Enter node name: ")
-    graph[node] = {}
-    heuristic[node] = int(input(f"Enter heuristic value for node {node}: "))
-
-m = int(input("Enter the number of edges: "))
-
-for _ in range(m):
-    edge = input("Enter edge (format: node1 node2 cost): ").split()
-    node1, node2, cost = edge[0], edge[1], int(edge[2])
-    graph[node1][node2] = cost
-    graph[node2][node1] = cost  # Assuming undirected graph
-
-start = input("Enter the start node: ")
-goal = input("Enter the goal node: ")
-
-path = ida_star(start, goal, graph, heuristic)
-
-if path:
-    print("\nFinal path found:", " -> ".join(path))
-else:
-    print("No path found.")
+    if result_path:
+        print("\nFinal path found:", " -> ".join(result_path))
+    else:
+        print("No path found.")

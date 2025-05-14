@@ -61,7 +61,6 @@ def a_star(tree, heuristics, start, goal):
 
     return None
 
-# Run the code
 if __name__ == "__main__":
     tree = input_weighted_tree()
     heuristics = input_heuristics(tree)

@@ -10,19 +10,18 @@ def input_tree():
     
     return tree
 
-# Function to assign values to leaf nodes
 def assign_leaf_values(tree):
     values = {}
     print("\nEnter values for leaf nodes:")
     for node in tree:
-        if not tree[node]:  # If the node has no children
+        if not tree[node]:  
             val = int(input(f"Value for leaf node '{node}': "))
             values[node] = val
     return values
 
-# Minimax function with path tracking
+
 def min_max(node, is_maximizing):
-    if node not in tree or not tree[node]:  # Base case: leaf node
+    if node not in tree or not tree[node]:  
         return values[node], [node]
 
     if is_maximizing:
@@ -45,7 +44,6 @@ def min_max(node, is_maximizing):
         return best_value, best_path
 
 
-# Main Execution
 tree = input_tree()
 values = assign_leaf_values(tree)
 root = input("\nEnter the root node: ")

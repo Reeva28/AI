@@ -1,22 +1,17 @@
 def dls(tree, node, target, depth, path):
-    # Add the current node to the path
+    
     path.append(node)
-
-    # If the target is found at the current node
+    
     if node == target:
         return True
-
-    # If depth limit reached, backtrack
+    
     if depth == 0:
         path.pop()
         return False
-
-    # Recur for all children
+    
     for neighbor in tree.get(node, []):
         if dls(tree, neighbor, target, depth - 1, path):
-            return True  # Target found in deeper call
-
-    # If not found in this path, backtrack
+            return True  
     path.pop()
     return False
 
@@ -40,7 +35,6 @@ def main():
         node = input("Enter node: ").strip()
         children_input = input(f"Enter children of node '{node}' (comma separated, leave empty if none): ").strip()
         
-        # Split and clean children
         if children_input:
             children = [child.strip() for child in children_input.split(',')]
         else:
@@ -54,4 +48,4 @@ def main():
     iddfs(tree, start, target, max_depth)
 if __name__ == "__main__":
     main()
-    
+   

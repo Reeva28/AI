@@ -29,7 +29,7 @@ def simple_hill_climbing(tree, values, start):
                 current = child
                 path.append(current)
                 moved = True
-                break  # Stop at first better neighbor
+                break  
         if not moved:
             break
 
