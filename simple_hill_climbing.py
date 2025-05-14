@@ -10,10 +10,9 @@ def input_tree():
 
 def assign_values(tree):
     values = {}
-    all_nodes = set(tree.keys())  # parent nodes
+    all_nodes = set(tree.keys())
     for children in tree.values():
-        all_nodes.update(children)  # add child nodes
-
+        all_nodes.update(children)
     for node in all_nodes:
         val = int(input(f"Enter value for node '{node}': "))
         values[node] = val
@@ -24,11 +23,14 @@ def simple_hill_climbing(tree, values, start):
     path = [current]
 
     while tree.get(current):
-        next_node = max(tree[current], key=lambda x: values[x])
-        if values[next_node] > values[current]:
-            current = next_node
-            path.append(current)
-        else:
+        moved = False
+        for child in tree[current]:
+            if values[child] > values[current]:
+                current = child
+                path.append(current)
+                moved = True
+                break  # Stop at first better neighbor
+        if not moved:
             break
 
     print("\nSimple Hill Climbing Path:", " -> ".join(path))
@@ -38,5 +40,4 @@ if __name__ == "__main__":
     tree = input_tree()
     values = assign_values(tree)
     start = input("Enter start node: ")
-
     simple_hill_climbing(tree, values, start)

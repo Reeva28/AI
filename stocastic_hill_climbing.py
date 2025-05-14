@@ -12,9 +12,9 @@ def input_tree():
 
 def assign_values(tree):
     values = {}
-    all_nodes = set(tree.keys())  # Collect parent nodes
+    all_nodes = set(tree.keys())  
     for children in tree.values():
-        all_nodes.update(children)  # Add child nodes as well
+        all_nodes.update(children) 
 
     for node in all_nodes:
         val = int(input(f"Enter value for node '{node}': "))
